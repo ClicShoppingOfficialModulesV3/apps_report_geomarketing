@@ -1,0 +1,3 @@
+title_menu = Geolocalisations
+title_menu_order_map = Orders map
+title_menu_order_visitor = Visitor Map

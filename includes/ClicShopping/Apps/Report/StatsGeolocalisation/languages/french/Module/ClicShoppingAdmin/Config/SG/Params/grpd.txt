@@ -1,0 +1,6 @@
+cfg_modules_stats_geolocalisation_grpd_title = GRPD
+cfg_modules_stats_geolocalisation_grpd_description = Sélectionner True pour utiliser la geolocalisation sur le catalogue
+
+cfg_modules_stats_geolocalisation_grpd_true = True
+cfg_modules_stats_geolocalisation_grpd_false = False
+

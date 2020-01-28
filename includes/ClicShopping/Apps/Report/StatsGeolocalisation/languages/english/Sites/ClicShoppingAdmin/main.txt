@@ -1,0 +1,85 @@
+heading_title = Geolocalisation
+module_sg_title = Geolocalisation
+module_sg_short_title = Geolocalisation
+
+text_modules_hooks = Geolocalisation
+text_configure =  configure App Module
+
+text_intro = This app allow you to dislay Geolocalisation Map. <br /><br />
+- Click on Configure to access / install or uninstall the app.<br />
+- The App is located in Report<br />
+
+module_sg_introduction = The install process create Geolocalisations menu and the access menu
+
+button_back = Back
+button_install_title = Install
+button_configure = Configure
+button_save = Save
+button_dialog_uninstall =  Uninstall
+button_uninstall =  Uninstall
+button_delete = Delete
+button_cancel = Cancel
+button_modules_stats_geolocalisation_access = Geolocalisations
+button_reset = Reset
+button_update = Update
+
+dialog_uninstall_title = Uninstall
+dialog_uninstall_body = Do you want install this App ?
+dialog_uninstall_title = Uninstall Module?
+dialog_uninstall_body = Are you sure you want to uninstall this module?
+
+alert_module_install_success = Module has been successfully installed.
+alert_module_uninstall_success = Module has been successfully uninstalled.
+alert_cfg_saved_success = Configuration parameters have been successfully saved.
+
+heading_title_order = Order geolocalisation
+heading_title_visitor = Visitor geolocalisation
+
+button_modules_stats_geolocalisation_configure = Configuration
+
+text_ip = IP
+text_view = Display result
+text_with_order_instance = Instance
+text_with_order_pending = Pending
+text_with_order_delivery = Delivery
+text_with_order_cancelled = Cancelled
+text_with_order_other = Other
+text_sheet = Create sheet
+text_customer_registred = Customer registred
+text_only_products_description = Only product description
+text_remove_ip = Delete IP
+text_remove_ip_desc = Write the ip to delete
+text_close = Fermer
+text_url = Url
+
+text_sort_order = -- Sort Order --
+text_country = Code Iso 2
+text_region = Region
+text_country_name = Country
+text_city = City
+text_postal_code = Postal Code
+text_products_name = Products Name
+text_categories_name = Categories Name
+text_brand_name = Brands name
+text_date_added = Dates
+text_products_model = Model
+text_products_price = Price
+text_products_quantity = Quantity
+text_total_amount = Total amount :
+text_customers_group = Customers Goup
+text_orders_status = Orders Status
+text_with_archive = Archive
+text_date_purchased = Date Purchased
+
+button_export_customer_info = Export all data
+
+text_help = Help / Info
+text_help_description = How the search it works
+<li>The button display allow to display the map result</li>
+<li>For the order, you only can choose one order status and make a mix about the criterias (except language not work)</li>
+<li>For product search, vous must enable the products description option (categories and bands)</li>
+<li>To display the result, after selected your criterias, click on search button
+<li>The customer can remove this ip address. In this case, you will be lost some information in the analyse</li>
+<li>More the shadow is important, more you have a result on a specific geolocalisation</li>
+
+

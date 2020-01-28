@@ -1,0 +1,6 @@
+cfg_modules_stats_geolocalisation_grpd_title = GRPD
+cfg_modules_stats_geolocalisation_grpd_description = Set True to enable or not  to use the geoloalisation on the stores
+
+cfg_modules_stats_geolocalisation_grpd_true = True
+cfg_modules_stats_geolocalisation_grpd_false = False
+

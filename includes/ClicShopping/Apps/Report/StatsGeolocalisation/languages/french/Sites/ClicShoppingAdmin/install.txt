@@ -1,0 +1,3 @@
+title_menu = Géolocalisations
+title_menu_order_map = Cartographie commandes
+title_menu_order_visitor = Cartographie visiteurs
