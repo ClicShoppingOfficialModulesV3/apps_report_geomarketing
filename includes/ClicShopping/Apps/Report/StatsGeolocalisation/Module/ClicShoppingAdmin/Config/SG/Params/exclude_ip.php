@@ -11,16 +11,15 @@
 
   namespace ClicShopping\Apps\Report\StatsGeolocalisation\Module\ClicShoppingAdmin\Config\SG\Params;
 
-  class sort_order extends \ClicShopping\Apps\Report\StatsGeolocalisation\Module\ClicShoppingAdmin\Config\ConfigParamAbstract
+  class exclude_ip extends \ClicShopping\Apps\Report\StatsGeolocalisation\Module\ClicShoppingAdmin\Config\ConfigParamAbstract
   {
 
-    public $default = '300';
-    public $app_configured = true;
-    public $sort_order = 300;
+    public $default = '91.242.162.8, 66.249.66.158, 5.9.110.227';
+    public $sort_order = 30;
 
     protected function init()
     {
-      $this->title = $this->app->getDef('cfg_modules_stats_geolocalisation_sort_order_title');
-      $this->description = $this->app->getDef('cfg_modules_stats_geolocalisation_sort_order_description');
+      $this->title = $this->app->getDef('cfg_modules_stats_geolocalisation_exclude_ip_title');
+      $this->description = $this->app->getDef('cfg_modules_stats_geolocalisation_exclude_ip_description');
     }
   }

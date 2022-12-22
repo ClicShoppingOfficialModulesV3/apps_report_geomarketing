@@ -1,0 +1,27 @@
+id int NOT NULL auto_increment,
+ip_address varchar(255) NULL,
+country varchar(255) NULL DEFAULT NULL,
+country_name varchar(255) NULL DEFAULT NULL,
+region varchar(255) NULL DEFAULT NULL,
+region_name varchar(255) NULL DEFAULT NULL,
+city varchar(255) NULL DEFAULT NULL,
+postal_code varchar(255) NULL DEFAULT NULL,
+latitude varchar(255) NULL NULL DEFAULT NULL,
+longitude varchar(255) NULL NULL DEFAULT NULL,
+url varchar(255) NULL DEFAULT NULL,
+products_name varchar(255) NULL DEFAULT NULL,
+products_id int(11) DEFAULT (0),
+categories_id int(11) DEFAULT (0),
+categories_name varchar(255) NULL DEFAULT NULL,
+brand_name varchar(255) NULL DEFAULT NULL,
+customers_id int(11) DEFAULT (0),
+language_id int(11) DEFAULT (0),
+google_position int(0),
+date_added datetime
+--
+primary id
+idx_id id
+##
+engine innodb
+character_set utf8mb4
+collate utf8mb4_unicode_ci

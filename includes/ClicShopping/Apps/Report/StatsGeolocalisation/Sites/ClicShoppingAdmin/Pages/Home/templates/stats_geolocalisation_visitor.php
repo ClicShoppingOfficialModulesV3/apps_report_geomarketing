@@ -19,20 +19,39 @@
 
   $CLICSHOPPING_Template = Registry::get('TemplateAdmin');
   $CLICSHOPPING_Language = Registry::get('Language');
-  $CLICSHOPPING_Db = Registry::get('Db');
 
   $CLICSHOPPING_StatsGeolocalisation = Registry::get('StatsGeolocalisation');
 
-  Registry::set('GeolocalisationAdmin', new GeolocalisationAdmin());
+  if (!Registry::exists('GeolocalisationAdmin')) {
+    Registry::set('GeolocalisationAdmin', new GeolocalisationAdmin());
+  }
+
   $CLICSHOPPING_GeolocalisationAdmin = Registry::get('GeolocalisationAdmin');
 
-  $min_zoom = 2.5;
-  $limit = '';
+  if (isset($_POST['min_zoom'])) {
+    $min_zoom = HTML::sanitize($_POST['min_zoom']);
+  } else {
+    $min_zoom = 2.5;
+  }
 
-  if (isset($_POST['min_zoom'])) $min_zoom = HTML::sanitize($_POST['min_zoom']);
-  if (isset($_POST['limit'])) $limit = HTML::sanitize($_POST['limit']);
-  if (isset($_POST['view'])) $view = HTML::sanitize($_POST['view']);
-  if (isset($_POST['products_description'])) $products_description_view =  HTML::sanitize($_POST['products_description']);
+  if (isset($_POST['limit'])) {
+    $limit = HTML::sanitize($_POST['limit']);
+  } else {
+    $limit = '';
+  }
+
+  if (isset($_POST['view'])) {
+    $view = HTML::sanitize($_POST['view']);
+  } else {
+    $view = 0;
+  }
+
+
+  if (isset($_POST['products_description'])) {
+    $products_description_view = HTML::sanitize($_POST['products_description']);
+  } else {
+    $products_description_view = 0;
+  }
 
   if (isset($_POST['customers_group_id'])) {
     $customers_group_id = HTML::sanitize($_POST['customers_group_id']);
@@ -47,8 +66,8 @@
   }
 ?>
 <!--https://github.com/asmaloney/Leaflet_Example-->
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
 <div class="contentBody">
   <div class="row">
     <div class="col-md-12">
@@ -61,12 +80,12 @@
             <?php echo '&nbsp;' . $CLICSHOPPING_StatsGeolocalisation->getDef('heading_title_visitor'); ?>
           </span>
 
-          <span class="col-md-6 text-md-right">
+          <span class="col-md-6 text-end">
              <span><?php echo HTML::button($CLICSHOPPING_StatsGeolocalisation->getDef('button_modules_stats_geolocalisation_configure'), null, $CLICSHOPPING_StatsGeolocalisation->link('Configure'), 'warning'); ?></span>
               <span>
                 <?php echo HTML::form('delete_ip', $CLICSHOPPING_StatsGeolocalisation->link('RemoveIP'));  ?>
 
-                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal1">
+                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal1">
                   <?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_remove_ip'); ?>
                 </button>
                 <div class="modal" id="myModal1">
@@ -75,11 +94,11 @@
                       <!-- Modal Header -->
                       <div class="modal-header">
                         <h4 class="modal-title"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_remove_ip'); ?></h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                       </div>
                       <!-- Modal body -->
                       <div class="modal-body">
-                        <div class="text-md-left">
+                        <div class="text-start">
                           <div class="row col-md-12">
                             <span class="col-md-7">
                             <?php
@@ -87,7 +106,7 @@
                               echo HTML::inputField('remove_ip', null, 'id="remove_ip" placeholder="178.156.202.81"');
                             ?>
                             </span>
-                            <span class="col-md-5 text-md-right">
+                            <span class="col-md-5 text-end">
                               <div class="separator"></div>
                               <?php echo HTML::button($CLICSHOPPING_StatsGeolocalisation->getDef('text_remove_ip'), null, null, 'primary'); ?>
                             </span>
@@ -96,7 +115,7 @@
                       </div>
                       <!-- Modal footer -->
                       <div class="modal-footer">
-                        <span class="text-md-left"><button type="button" class="btn btn-warning" data-dismiss="modal"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_close'); ?></button></span>
+                        <span class="text-start"><button type="button" class="btn btn-warning" data-bs-dismiss="modal"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_close'); ?></button></span>
                       </div>
                     </div>
                   </div>
@@ -106,7 +125,7 @@
 
               <?php echo HTML::form('export_customer', $CLICSHOPPING_StatsGeolocalisation->link('ExportVisitor'));  ?>
               <span>
-               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalExport">
+               <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalExport">
                 <?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('button_export_customer_info'); ?>
               </button>
               <div class="modal" id="myModalExport">
@@ -115,13 +134,13 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                       <h4 class="modal-title"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('button_export_customer_info'); ?></h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     </div>
                     <!-- Modal body -->
                     <div class="modal-body">
-                      <div class="text-md-left">
+                      <div class="text-start">
                         <div class="row col-md-12">
-                          <span class="col-md-12 text-md-right">
+                          <span class="col-md-12 text-end">
                           <?php echo HTML::button($CLICSHOPPING_StatsGeolocalisation->getDef('button_export_customer_info'), null, null, 'primary'); ?>
                           </span>
                           <div class="separator"></div>
@@ -140,7 +159,7 @@
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                      <span class="text-md-left"><button type="button" class="btn btn-warning" data-dismiss="modal"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_close'); ?></button></span>
+                      <span class="text-start"><button type="button" class="btn btn-warning" data-bs-dismiss="modal"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_close'); ?></button></span>
                     </div>
                   </div>
                 </div>
@@ -148,7 +167,7 @@
             </span>
             </form>
 
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#myModal">
               <?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help'); ?>
             </button>
             <div class="modal" id="myModal">
@@ -157,15 +176,15 @@
                   <!-- Modal Header -->
                   <div class="modal-header">
                     <h4 class="modal-title"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help'); ?></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                   </div>
                   <!-- Modal body -->
                   <div class="modal-body">
-                    <div class="text-md-left"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help_description'); ?></div>
+                    <div class="text-start"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help_description'); ?></div>
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
@@ -176,66 +195,120 @@
     </div>
   </div>
   <div class="separator"></div>
-  <?php echo HTML::form('search', $CLICSHOPPING_StatsGeolocalisation->link('StatsGeolocalisationVisitor'), 'post', 'class="form-inline"', ['session_id' => true]); ?>
+  <?php echo HTML::form('search', $CLICSHOPPING_StatsGeolocalisation->link('StatsGeolocalisationVisitor'), 'post', '', ['session_id' => true]); ?>
 
   <div class="row col-md-12">
     <div class="col-md-10 card">
-      <div class="row col-md-12 form-group">
-        <span><?php echo HTML::inputField('country_name', null, 'placeholder="Country name"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('region', null, 'placeholder="Region"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('city', null, 'placeholder="City"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('postal_code', null, 'placeholder="Zip"'); ?>&nbsp;</span>
-        <span><?php echo HTML::selectField('customers_group_id', GroupsB2BAdmin::getAllGroups(), $customers_group_id); ?>&nbsp;</span>
-        <span><?php echo HTML::selectField('language_id', $CLICSHOPPING_Language->getAllLanguage(true), $language); ?>&nbsp;</span>
+      <div class="row" id="tab1Content1">
+        <div class="col-md-2" id="country_name">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('country_name', null, 'placeholder="Country name"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="region">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('region', null, 'placeholder="Region"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="city">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('city', null, 'placeholder="City"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="zip">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('postal_code', null, 'placeholder="Zip"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="customers_group_id">
+          <div class="form-group row">
+            <span><?php echo HTML::selectField('customers_group_id', GroupsB2BAdmin::getAllGroups(), $customers_group_id); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="language_id">
+          <div class="form-group row">
+            <span><?php echo HTML::selectField('language_id', $CLICSHOPPING_Language->getAllLanguage(true), $language); ?>&nbsp;</span>
+          </div>
+        </div>
       </div>
       <div class="separator"></div>
-      <div class="row col-md-12 form-group">
-        <span><?php echo HTML::inputField('products_name', null, 'placeholder="Products Name"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('categories_name', null, 'placeholder="Categories Name"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('brand_name', null, 'placeholder="Brand name"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('date_start', null, null, 'date'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('date_end', null, null, 'date'); ?>&nbsp;</span>
 
-        <span>
-          <ul class="list-group-slider list-group-flush">
-            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_view'); ?></span>
-            <li class="list-group-item-slider">
-              <label class="switch">
-                <?php echo HTML::checkboxField('view', true, null, 'class="success"'); ?>
-                <span class="slider"></span>
-              </label>
-            </li>
-          </ul>
-        </span>
-        <span class="float-md-right text-md-right"><?php echo HTML::button('Search', null, null, 'success', null, 'sm'); ?>&nbsp;</span>
+      <div class="row" id="tab1Content2">
+        <div class="col-md-2" id="products_name">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('products_name', null, 'placeholder="Products Name"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="categories_name">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('categories_name', null, 'placeholder="categories_name"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="brand_name">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('brand_name', null, 'placeholder="Brand name"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="date_start">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('date_start', null, null, 'date'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="date_end">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('date_end', null, null, 'date'); ?>&nbsp;</span>
+          </div>
+        </div>
+      </div>
 
-
-        <div class="row col-md-12">
+      <div class="row col-md-12" id="tab1Content3">
+        <div class="col-md-2" id="text_view">
+          <div class="form-group row">
+            <span class="col-md-2">
+              <ul class="list-group-slider list-group-flush">
+                <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_view'); ?></span>
+                <li class="list-group-item-slider">
+                  <label class="switch">
+                    <?php echo HTML::checkboxField('view', true, null, 'class="success"'); ?>
+                    <span class="slider"></span>
+                  </label>
+                </li>
+              </ul>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2" id="text_customer_registred">
           <span class="col-md-2">
-          <ul class="list-group-slider list-group-flush">
-            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_customer_registred'); ?></span>
-            <li class="list-group-item-slider">
-              <label class="switch">
-                <?php echo HTML::checkboxField('customer_registred', false, null, 'class="success"'); ?>
-                <span class="slider"></span>
-              </label>
-            </li>
-          </ul>
-          </span>
-
-          <span class="col-md-3">
             <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_only_products_description'); ?></span>
+              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_customer_registred'); ?></span>
               <li class="list-group-item-slider">
                 <label class="switch">
-                  <?php echo HTML::checkboxField('products_description', false, null, 'class="success"'); ?>
+                  <?php echo HTML::checkboxField('customer_registred', false, null, 'class="success"'); ?>
                   <span class="slider"></span>
                 </label>
               </li>
             </ul>
-          </span>
         </div>
-
+        <div class="col-md-2" id="products_description">
+          <div class="form-group row">
+            <span class="col-md-2">
+              <ul class="list-group-slider list-group-flush">
+                <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_only_products_description'); ?></span>
+                <li class="list-group-item-slider">
+                  <label class="switch">
+                    <?php echo HTML::checkboxField('products_description', false, null, 'class="success"'); ?>
+                    <span class="slider"></span>
+                  </label>
+                </li>
+              </ul>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2" id="Search">
+          <div class="form-group row">
+            <span class="float-end text-end"><?php echo HTML::button('Search', null, null, 'success', null, 'sm'); ?>&nbsp;</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -259,7 +332,7 @@
         ['id' => 'brand_name', 'text' => $CLICSHOPPING_StatsGeolocalisation->getDef('text_brand_name')],
       ];
 ?>
-          <span><?php echo HTML::selectField('sort_order', $sort_order_array); ?></span>
+        <span><?php echo HTML::selectField('sort_order', $sort_order_array); ?></span>
 
         <span>
           <ul class="list-group-slider list-group-flush">
@@ -281,6 +354,13 @@
   <div class="separator"></div>
   <div id="map" style="height: 700px; border: 1px solid #AAA;"></div>
 <?php
+  $arrays[] = [
+    'name' => '',
+    'url' => '',
+    'lat' => '',
+    'lng' => '',
+  ];
+
   if ($view == 1) {
     $result_array = $CLICSHOPPING_GeolocalisationAdmin->getDataNoOrder();
 
@@ -323,26 +403,27 @@
 
         <?php
         $i = 1;
-
-        foreach ($result_array as $value) {
-          $url = str_replace(CLICSHOPPING::getConfig('http_path', 'Shop'), '', $value['url']);
+        if (isset($result_array)) {
+          foreach ($result_array as $value) {
+            $url = str_replace(CLICSHOPPING::getConfig('http_path', 'Shop'), '', $value['url']);
         ?>
-          <tr>
-            <td><?php echo $i++; ?></td>
-            <td><?php echo '<a href="https://ipinfo.io/' . $value['ip_address'] . '" target="_blank" rel="noopener">' . $value['ip_address'] . '</a>'; ?></td>
-            <td><?php echo $value['country']; ?></td>
-            <td><?php echo $value['country_name']; ?></td>
-            <td><?php echo $value['region']; ?></td>
-            <td><?php echo $value['city']; ?></td>
-            <td><?php echo $value['postal_code']; ?></td>
-            <td width="300"><?php echo $url; ?></td>
-            <td><?php echo $value['products_name']; ?></td>
-            <td><?php echo $value['categories_name']; ?></td>
-            <td><?php echo $value['brand_name']; ?></td>
-            <td><?php echo $value['date_added']; ?></td>
-          </tr>
-          <?php
-        }
+            <tr>
+              <td><?php echo $i++; ?></td>
+              <td><?php echo '<a href="https://ipinfo.io/' . $value['ip_address'] . '" target="_blank" rel="noreferrer">' . $value['ip_address'] . '</a>'; ?></td>
+              <td><?php echo $value['country']; ?></td>
+              <td><?php echo $value['country_name']; ?></td>
+              <td><?php echo $value['region']; ?></td>
+              <td><?php echo $value['city']; ?></td>
+              <td><?php echo $value['postal_code']; ?></td>
+              <td width="300"><?php echo $url; ?></td>
+              <td><?php echo $value['products_name']; ?></td>
+              <td><?php echo $value['categories_name']; ?></td>
+              <td><?php echo $value['brand_name']; ?></td>
+              <td><?php echo $value['date_added']; ?></td>
+            </tr>
+            <?php
+            }
+          }
         ?>
 
         </tbody>

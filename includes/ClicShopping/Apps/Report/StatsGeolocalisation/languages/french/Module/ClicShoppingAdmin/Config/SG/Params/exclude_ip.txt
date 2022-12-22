@@ -1,0 +1,2 @@
+cfg_modules_stats_geolocalisation_exclude_ip_title = Exclure une adresse IP
+cfg_modules_stats_geolocalisation_exclude_ip_description = La navigation dans le catalogue sera exclue (veuillez séparer chaque IP par une (,) virgule)

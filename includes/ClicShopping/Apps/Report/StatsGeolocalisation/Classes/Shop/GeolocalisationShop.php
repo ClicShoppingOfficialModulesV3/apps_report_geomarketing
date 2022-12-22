@@ -13,6 +13,7 @@
 
   use ClicShopping\OM\Registry;
   use ClicShopping\OM\HTTP;
+  use ClicShopping\OM\Is;
   use ClicShopping\OM\CLICSHOPPING;
 
   class GeolocalisationShop
@@ -26,8 +27,8 @@
       $this->ip = HTTP::getIpAddress();
       $this->db = Registry::get('Db');
       $this->lang = Registry::get('Language');
-      $this->checkIP();
       $this->checkSpider();
+      $this->checkIP();
     }
 
     /**
@@ -47,15 +48,15 @@
      */
     public function checkIP($ip = null): bool
     {
-      if (!is_null($ip)) {
+      if (!\is_null($ip)) {
         if ($ip == '::1') {
           $result = false;
         } else {
           $result = true;
         }
       } else {
-        if (is_null($ip)) {
-          if ($this->ip == '::1' || empty($this->ip) || is_null($ip)) {
+        if (\is_null($ip)) {
+          if (!Is::IpAddress($this->ip)) {
             $result = false;
           } else {
             $result = true;
@@ -63,7 +64,7 @@
 
           $array_remove = explode (  ',' ,  CLICSHOPPING_APP_STATS_GEOLOCALISATION_SG_EXCLUDE_IP);
 
-            if(is_array($array_remove)) {
+            if(\is_array($array_remove)) {
             foreach ($array_remove as $item) {
               $result = false;
             }
@@ -79,7 +80,7 @@
      */
     public function getData($ip = null): array
     {
-      if (is_null($ip)) {
+      if (\is_null($ip)) {
         $array_response = [
           'url' => 'https://freegeoip.app/json/' . $this->ip
         ];
@@ -185,7 +186,7 @@
     {
       $params = $this->explodeUrl();
 
-      $result = $params[count($params)-1]; // 11
+      $result = $params[\count($params)-1]; // 11
 
       $products_id = str_replace('products_id-', '', $result);
 
@@ -239,16 +240,15 @@
 
       $products_id = $this->getProductId();
 
-      if ($products_id !== 0 && !is_null($products_id)) {
+      if ($products_id !== 0 && !\is_null($products_id)) {
         $brand_name = $CLICSHOPPING_ProductsCommon->getProductsManufacturer($products_id);
 
       } else {
-        if (!is_null(strpos( $_SERVER['REQUEST_URI'], 'manufacturersId'))) {;
+        if (!\is_null(strpos( $_SERVER['REQUEST_URI'], 'manufacturersId'))) {;
           $params = $this->explodeUrl();
-          $result = $params[count($params)-1]; // 11
+          $result = $params[\count($params)-1]; // 11
 
-          $manufacturers_id = str_replace('manufacturersId-', '', $result);
-          $manufacturers_id = str_replace($manufacturers_id, 'manufacturers_id', $result);
+          $manufacturers_id = str_replace('manufacturers_id-', '', $result);
 
           $Qmanufacturer = $this->db->prepare('select manufacturers_name
                                                 from :table_manufacturers
@@ -286,9 +286,9 @@
 
         $categories_id = $Qcategories->valueInt('categories_id');
       } else {
-       if (!is_null(strpos( $_SERVER['REQUEST_URI'], 'cPath'))) {;
+       if (!\is_null(strpos( $_SERVER['REQUEST_URI'], 'cPath'))) {;
           $params = $this->explodeUrl();
-          $result = $params[count($params)-1]; // 11
+          $result = $params[\count($params)-1]; // 11
 
          $categories_id = str_replace('cPath-', '', $result);
 
@@ -343,33 +343,35 @@
      */
     public function saveData()
     {
-      $this->getData();
+      if ($this->checkSpider() !== false) {
+        $this->getData();
 
-      //currency
-      $sql_array = [
-        'ip_address' => $this->ip,
-        'country' => $this->getCountry(),
-        'country_name' => $this->getCountryName(),
-        'region' => $this->getRegion(),
-        'region_name' => $this->getRegionName(),
-        'city' => $this->getCity(),
-        'postal_code' => $this->getPostalCode(),
-        'latitude' => $this->geoLocalisationLatitude(),
-        'longitude' => $this->geoLocalisationLongitude(),
-        'url' => $_SERVER['REQUEST_URI'],
-        'products_name' => $this->getProductName(),
-        'products_ean' => $this->getProductsEAN(),
-        'products_id' => (int)$this->getProductId(),
-        'categories_id' => (int)$this->getCategoriesId(),
-        'categories_name' => $this->getCategoriesName(),
-        'brand_name' => $this->getBrandName(),
-        'customers_id' => (int)$this->getCustomersId(),
-        'language_id' => $this->lang->getid(),
-        'google_position' => (int)$this->getGooglePosition(),
-        'date_added' => 'now()'
-      ];
+        //currency
+        $sql_array = [
+          'ip_address' => $this->ip,
+          'country' => $this->getCountry(),
+          'country_name' => $this->getCountryName(),
+          'region' => $this->getRegion(),
+          'region_name' => $this->getRegionName(),
+          'city' => $this->getCity(),
+          'postal_code' => $this->getPostalCode(),
+          'latitude' => $this->geoLocalisationLatitude(),
+          'longitude' => $this->geoLocalisationLongitude(),
+          'url' => $_SERVER['REQUEST_URI'],
+          'products_name' => $this->getProductName(),
+          'products_ean' => $this->getProductsEAN(),
+          'products_id' => (int)$this->getProductId(),
+          'categories_id' => (int)$this->getCategoriesId(),
+          'categories_name' => $this->getCategoriesName(),
+          'brand_name' => $this->getBrandName(),
+          'customers_id' => (int)$this->getCustomersId(),
+          'language_id' => $this->lang->getid(),
+          'google_position' => (int)$this->getGooglePosition(),
+          'date_added' => 'now()'
+        ];
 
-      $this->db->save('info_customer_tracking', $sql_array);
+        $this->db->save('info_customer_tracking', $sql_array);
+      }
     }
 
     /**
@@ -391,17 +393,18 @@
         $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
       }
 
+
       if (!empty($user_agent)) {
         $file_array = file(CLICSHOPPING::BASE_DIR . 'Sites/' . CLICSHOPPING::getSite() . '/Assets/spiders.txt');
 
-        if (is_array($file_array)) {
+        if (\is_array($file_array)) {
           foreach ($file_array as $spider) {
-            if ((substr($spider, strlen($spider) - 1, 1) == ' ') || (substr($spider, strlen($spider) - 1, 1) == "\n")) {
-              $spider = substr($spider, 0, strlen($spider) - 1);
+            if ((substr($spider, \strlen($spider) - 1, 1) == ' ') || (substr($spider, \strlen($spider) - 1, 1) == "\n")) {
+              $spider = substr($spider, 0, \strlen($spider) - 1);
             }
 
             if (!empty($spider)) {
-              if (strpos($user_agent, $spider) !== false) {
+              if (str_contains($user_agent, $spider)) {
                 return true;
               }
             }

@@ -32,7 +32,7 @@
         }
       }
 
-      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_cfg_saved_success'), 'success', 'StatsGeolocalisation');
+      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_cfg_saved_success'), 'success');
 
       $CLICSHOPPING_StatsGeolocalisation->redirect('Configure&module=' . $current_module);
     }

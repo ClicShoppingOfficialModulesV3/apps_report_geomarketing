@@ -33,8 +33,9 @@
 
       static::installDbMenuAdministration();
       static::installDb();
+      static::instaLlOrderGeolocalisationDb();
 
-      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_module_install_success'), 'success', 'StatsGeolocalisation');
+      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_module_install_success'), 'success');
 
       $CLICSHOPPING_StatsGeolocalisation->redirect('Configure&module=' . $current_module);
     }
@@ -67,7 +68,7 @@
 
         $languages = $CLICSHOPPING_Language->getLanguages();
 
-        for ($i = 0, $n = count($languages); $i < $n; $i++) {
+        for ($i = 0, $n = \count($languages); $i < $n; $i++) {
 
           $language_id = $languages[$i]['id'];
 
@@ -112,7 +113,7 @@
 
         $languages = $CLICSHOPPING_Language->getLanguages();
 
-        for ($i = 0, $n = count($languages); $i < $n; $i++) {
+        for ($i = 0, $n = \count($languages); $i < $n; $i++) {
 
           $language_id = $languages[$i]['id'];
 
@@ -148,7 +149,7 @@
 
         $languages = $CLICSHOPPING_Language->getLanguages();
 
-        for ($i = 0, $n = count($languages); $i < $n; $i++) {
+        for ($i = 0, $n = \count($languages); $i < $n; $i++) {
 
           $language_id = $languages[$i]['id'];
 
@@ -167,7 +168,7 @@
       }
     }
 
-    public static function installDb() {
+    private static function installDb() {
       $CLICSHOPPING_Db = Registry::get('Db');
 
       $Qcheck = $CLICSHOPPING_Db->query('show tables like ":table_info_customer_tracking"');
@@ -175,5 +176,23 @@
       if ($Qcheck->fetch() === false) {
         $CLICSHOPPING_Db->installNewDb('info_customer_tracking');
       }
+    }
+
+    /**
+     * instalOrderGeolocalisationDb
+     */
+    private static function instaLlOrderGeolocalisationDb()
+    {
+      $CLICSHOPPING_Db = Registry::get('Db');
+
+//      $Qcheck = $CLICSHOPPING_Db->query('show tables like ":table_orders_status_support"');
+
+  //    if ($Qcheck->fetch() === false) {
+        $sql = <<<EOD
+        ALTER TABLE :table_orders ADD latitude varchar(255) null AFTER erp_invoice;
+        ALTER TABLE :table_orders ADD longitude varchar(255) null AFTER erp_invoice;
+EOD;
+        $CLICSHOPPING_Db->exec($sql);
+//      }
     }
   }

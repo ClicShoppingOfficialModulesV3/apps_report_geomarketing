@@ -32,7 +32,7 @@ This application is compatible with the GRPD
 
 Apps :
 
-English and Franch
+English and French
 Licence GPL 2 - MIT
 
 Important Note :

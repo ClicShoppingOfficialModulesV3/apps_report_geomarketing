@@ -27,14 +27,14 @@
       $this->title = $this->app->getDef('module_sg_title');
       $this->short_title = $this->app->getDef('module_sg_short_title');
       $this->introduction = $this->app->getDef('module_sg_introduction');
-      $this->is_installed = defined('CLICSHOPPING_APP_STATS_GEOLOCALISATION_SG_STATUS') && (trim(CLICSHOPPING_APP_STATS_GEOLOCALISATION_SG_STATUS) != '');
+      $this->is_installed = \defined('CLICSHOPPING_APP_STATS_GEOLOCALISATION_SG_STATUS') && (trim(CLICSHOPPING_APP_STATS_GEOLOCALISATION_SG_STATUS) != '');
     }
 
     public function install()
     {
       parent::install();
 
-      if (defined('MODULE_MODULES_STATS_GEOLOCALISATION_INSTALLED')) {
+      if (\defined('MODULE_MODULES_STATS_GEOLOCALISATION_INSTALLED')) {
         $installed = explode(';', MODULE_MODULES_STATS_GEOLOCALISATION_INSTALLED);
       }
 

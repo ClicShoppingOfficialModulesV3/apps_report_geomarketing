@@ -16,8 +16,8 @@
   $CLICSHOPPING_StatsGeolocalisation = Registry::get('StatsGeolocalisation');
   $CLICSHOPPING_MessageStack = Registry::get('MessageStack');
 
-  if ($CLICSHOPPING_MessageStack->exists('StatsGeolocalisation')) {
-    echo $CLICSHOPPING_MessageStack->get('StatsGeolocalisation');
+  if ($CLICSHOPPING_MessageStack->exists('main')) {
+    echo $CLICSHOPPING_MessageStack->get('main');
   }
 ?>
 <div class="contentBody">
@@ -41,15 +41,15 @@
       <div class="separator"></div>
 
       <div class="col-md-12">
-        <div class="form-group">
+        <div>
           <div class="col-md-12">
             <?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_intro'); ?>
           </div>
         </div>
         <div class="separator"></div>
 
-        <div class="col-md-12 text-md-center">
-          <div class="form-group">
+        <div class="col-md-12 text-center">
+          <div>
             <div class="col-md-12">
               <?php
                 echo HTML::form('configure', CLICSHOPPING::link(null, 'A&Report\StatsGeolocalisation&Configure'));

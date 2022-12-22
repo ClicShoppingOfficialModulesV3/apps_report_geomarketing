@@ -19,27 +19,40 @@
 
   $CLICSHOPPING_Template = Registry::get('TemplateAdmin');
   $CLICSHOPPING_StatsGeolocalisation = Registry::get('StatsGeolocalisation');
+  $CLICSHOPPING_Language = Registry::get('Language');
 
   Registry::set('GeolocalisationAdmin', new GeolocalisationAdmin());
   $CLICSHOPPING_GeolocalisationAdmin = Registry::get('GeolocalisationAdmin');
 
   $min_zoom = 2.5;
   $limit = '';
+  $view = 0;
+  $customers_group_id = 99;
+  $language = 0;
 
-  if (isset($_POST['limit'])) $limit = HTML::sanitize($_POST['limit']);
-  if (isset($_POST['min_zoom'])) $min_zoom = HTML::sanitize($_POST['min_zoom']);
-  if (isset($_POST['view'])) $view = HTML::sanitize($_POST['view']);
+  if (isset($_POST['limit'])) {
+    $limit = HTML::sanitize($_POST['limit']);
+  }
+
+  if (isset($_POST['min_zoom'])) {
+    $min_zoom = HTML::sanitize($_POST['min_zoom']);
+  }
+
+  if (isset($_POST['view'])) {
+    $view = HTML::sanitize($_POST['view']);
+  }
 
   if (isset($_POST['customers_group_id'])) {
     $customers_group_id = HTML::sanitize($_POST['customers_group_id']);
-  } else {
-    $customers_group_id = 99;
+  }
+
+  if (isset( $_POST['language'])) {
+    $language = HTML::sanitize( $_POST['language']);
   }
 ?>
 <!--https://github.com/asmaloney/Leaflet_Example-->
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
-
 <div class="contentBody">
   <div class="row">
     <div class="col-md-12">
@@ -52,12 +65,12 @@
             <?php echo '&nbsp;' . $CLICSHOPPING_StatsGeolocalisation->getDef('heading_title_order'); ?>
           </span>
 
-          <span class="col-md-8 text-md-right">
+          <span class="col-md-8 text-end">
             <span><?php echo HTML::button($CLICSHOPPING_StatsGeolocalisation->getDef('button_modules_stats_geolocalisation_configure'), null, $CLICSHOPPING_StatsGeolocalisation->link('Configure'), 'warning'); ?></span>
 
             <?php echo HTML::form('export_customer', $CLICSHOPPING_StatsGeolocalisation->link('ExportOrders'));  ?>
               <span>
-               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalExport">
+               <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModalExport">
                 <?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('button_export_customer_info'); ?>
               </button>
               <div class="modal" id="myModalExport">
@@ -66,13 +79,13 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                       <h4 class="modal-title"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('button_export_customer_info'); ?></h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                     </div>
                     <!-- Modal body -->
                     <div class="modal-body">
-                      <div class="text-md-left">
+                      <div class="text-start">
                         <div class="row col-md-12">
-                          <span class="col-md-12 text-md-right">
+                          <span class="col-md-12 text-end">
                           <?php echo HTML::button($CLICSHOPPING_StatsGeolocalisation->getDef('button_export_customer_info'), null, null, 'primary'); ?>
                           </span>
                           <div class="separator"></div>
@@ -115,7 +128,7 @@
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                      <span class="text-md-left"><button type="button" class="btn btn-warning" data-dismiss="modal"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_close'); ?></button></span>
+                      <span class="text-start"><button type="button" class="btn btn-warning" data-bs-dismiss="modal"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_close'); ?></button></span>
                     </div>
                   </div>
                 </div>
@@ -123,7 +136,7 @@
             </span>
             </form>
 
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#myModal">
               <?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help'); ?>
             </button>
             <div class="modal" id="myModal">
@@ -132,15 +145,15 @@
                   <!-- Modal Header -->
                   <div class="modal-header">
                     <h4 class="modal-title"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help'); ?></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                   </div>
                   <!-- Modal body -->
                   <div class="modal-body">
-                    <div class="text-md-left"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help_description'); ?></div>
+                    <div class="text-start"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_help_description'); ?></div>
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
@@ -151,27 +164,69 @@
     </div>
   </div>
   <div class="separator"></div>
-
-<?php echo HTML::form('search', $CLICSHOPPING_StatsGeolocalisation->link('StatsGeolocalisationOrder'), 'post', 'class="form-inline"', ['session_id' => true]); ?>
+  <?php echo HTML::form('search', $CLICSHOPPING_StatsGeolocalisation->link('StatsGeolocalisationOrder'), 'post', '', ['session_id' => true]); ?>
 
   <div class="row col-md-12">
     <div class="col-md-10 card">
-      <div class="row col-md-12 form-group">
-        <span><?php echo HTML::inputField('country_name', null, 'placeholder="Country name"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('region', null, 'placeholder="Region"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('city', null, 'placeholder="City"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('postal_code', null, 'placeholder="Zip"'); ?>&nbsp;</span>
-        <span><?php echo HTML::selectField('customers_group_id', GroupsB2BAdmin::getAllGroups(), $customers_group_id); ?>&nbsp;</span>
+      <div class="row" id="tab1Content1">
+        <div class="col-md-2" id="country_name">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('country_name', null, 'placeholder="Country name"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="region">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('region', null, 'placeholder="Region"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="city">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('city', null, 'placeholder="City"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="zip">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('postal_code', null, 'placeholder="Zip"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="customers_group_id">
+          <div class="form-group row">
+            <span><?php echo HTML::selectField('customers_group_id', GroupsB2BAdmin::getAllGroups(), $customers_group_id); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="language_id">
+          <div class="form-group row">
+            <span><?php echo HTML::selectField('language_id', $CLICSHOPPING_Language->getAllLanguage(true), $language); ?>&nbsp;</span>
+          </div>
+        </div>
       </div>
       <div class="separator"></div>
-      <div class="row col-md-12 form-group">
-        <span><?php echo HTML::inputField('products_name', null, 'placeholder="Products Name"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('products_model', null, 'placeholder="Product Model"'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('date_start', null, 'placeholder="Date start"', 'date'); ?>&nbsp;</span>
-        <span><?php echo HTML::inputField('date_end', null, 'placeholder="Date end"', 'date'); ?>&nbsp;</span>
 
+      <div class="row" id="tab1Content2">
+        <div class="col-md-2" id="products_name">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('products_name', null, 'placeholder="Products Name"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="products_model">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('products_model', null, 'placeholder="Products Model"'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="date_start">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('date_start', null, null, 'date'); ?>&nbsp;</span>
+          </div>
+        </div>
+        <div class="col-md-2" id="date_end">
+          <div class="form-group row">
+            <span><?php echo HTML::inputField('date_end', null, null, 'date'); ?>&nbsp;</span>
+          </div>
+        </div>
+      </div>
 
-        <span class="col-md-3">
+      <div class="row col-md-12" id="tab1Content2">
+        <span class="col-md-2">
           <ul class="list-group-slider list-group-flush">
             <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_view'); ?></span>
             <li class="list-group-item-slider">
@@ -182,83 +237,92 @@
             </li>
           </ul>
         </span>
-        <span class="text-md-right"><?php echo HTML::button('Search', null, null, 'success', null, 'sm'); ?>&nbsp;</span>
 
-        <div class="row col-md-12">
-          <span class="col-md-2">
-            <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_instance'); ?></span>
-              <li class="list-group-item-slider">
-                <label class="switch">
-                  <?php echo HTML::checkboxField('order_instance', false, null, 'class="success"'); ?>
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </span>
+        <span class="col-md-2">
+          <ul class="list-group-slider list-group-flush">
+            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_instance'); ?></span>
+            <li class="list-group-item-slider">
+              <label class="switch">
+                <?php echo HTML::checkboxField('order_instance', false, null, 'class="success"'); ?>
+                <span class="slider"></span>
+              </label>
+            </li>
+          </ul>
+        </span>
 
-          <span class="col-md-2">
-            <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_pending'); ?></span>
-              <li class="list-group-item-slider">
-                <label class="switch">
-                  <?php echo HTML::checkboxField('order_pending', false, null, 'class="success"'); ?>
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </span>
+        <span class="col-md-2">
+          <ul class="list-group-slider list-group-flush">
+            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_pending'); ?></span>
+            <li class="list-group-item-slider">
+              <label class="switch">
+                <?php echo HTML::checkboxField('order_pending', false, null, 'class="success"'); ?>
+                <span class="slider"></span>
+              </label>
+            </li>
+          </ul>
+        </span>
 
-          <span class="col-md-2">
-            <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_delivery'); ?></span>
-              <li class="list-group-item-slider">
-                <label class="switch">
-                  <?php echo HTML::checkboxField('order_delivery', false, null, 'class="success"'); ?>
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </span>
+        <span class="col-md-2">
+          <ul class="list-group-slider list-group-flush">
+            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_delivery'); ?></span>
+            <li class="list-group-item-slider">
+              <label class="switch">
+                <?php echo HTML::checkboxField('order_delivery', false, null, 'class="success"'); ?>
+                <span class="slider"></span>
+              </label>
+            </li>
+          </ul>
+        </span>
 
-          <span class="col-md-2">
-            <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_cancelled'); ?></span>
-              <li class="list-group-item-slider">
-                <label class="switch">
-                  <?php echo HTML::checkboxField('order_cancelled', false, null, 'class="success"'); ?>
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </span>
+        <span class="col-md-2">
+          <ul class="list-group-slider list-group-flush">
+            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_cancelled'); ?></span>
+            <li class="list-group-item-slider">
+              <label class="switch">
+                <?php echo HTML::checkboxField('order_cancelled', false, null, 'class="success"'); ?>
+                <span class="slider"></span>
+              </label>
+            </li>
+          </ul>
+        </span>
 
-          <span class="col-md-2">
-            <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_other'); ?></span>
-              <li class="list-group-item-slider">
-                <label class="switch">
-                  <?php echo HTML::checkboxField('order_other', false, null, 'class="success"'); ?>
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </span>
-
-          <span class="col-md-2">
-            <ul class="list-group-slider list-group-flush">
-              <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_archive'); ?></span>
-              <li class="list-group-item-slider">
-                <label class="switch">
-                  <?php echo HTML::checkboxField('order_archive', false, null, 'class="success"'); ?>
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </span>
+        <span class="col-md-2">
+          <ul class="list-group-slider list-group-flush">
+            <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_order_other'); ?></span>
+            <li class="list-group-item-slider">
+              <label class="switch">
+                <?php echo HTML::checkboxField('order_other', false, null, 'class="success"'); ?>
+                <span class="slider"></span>
+              </label>
+            </li>
+          </ul>
+        </span>
+      </div>
+      <div class="row col-md-12" id="tab1Content3">
+        <div class="col-md-2" id="text_with_order_other">
+          <div class="form-group row">
+            <span class="col-md-2">
+              <ul class="list-group-slider list-group-flush">
+                <span class="text-slider"><?php echo $CLICSHOPPING_StatsGeolocalisation->getDef('text_with_archive'); ?></span>
+                <li class="list-group-item-slider">
+                  <label class="switch">
+                    <?php echo HTML::checkboxField('order_archive', false, null, 'class="success"'); ?>
+                    <span class="slider"></span>
+                  </label>
+                </li>
+              </ul>
+            </span>
+          </div>
         </div>
+
+        <div class="col-md-2  text-end id="text_with_order_other">
+          <div class="form-group row">
+            <span class="text-end"><?php echo HTML::button('Search', null, null, 'success', null, 'sm'); ?>&nbsp;</span>
+          </div>
+         </div>
       </div>
     </div>
+
 
     <div  class="col-md-2 card">
       <div class="col-md-12 form-group">
@@ -299,9 +363,16 @@
   <div class="separator"></div>
   <div id="map" style="height: 700px; border: 1px solid #AAA;"></div>
 <?php
+  $arrays[] = [
+    'name' => '',
+    'url' => '',
+    'lat' =>  '',
+    'lng' =>  '',
+  ];
+
   if ($view == 1) {
     $result_array = $CLICSHOPPING_GeolocalisationAdmin->geOrder();
-    if (is_array($result_array)) {
+    if (\is_array($result_array)) {
       foreach ($result_array as $value) {
         $total_order = $value['products_price'] * $value['products_quantity'];
 
@@ -352,7 +423,7 @@
         foreach ($result_array as $value) {
         ?>
           <tr>
-            <td><?php echo '<a href="https://ipinfo.io/' . $value['ip_address'] . '" target="_blank" rel="noopener">' . $value['ip_address'] . '</a>'; ?></td>
+            <td><?php echo '<a href="https://ipinfo.io/' . $value['ip_address'] . '" target="_blank" rel="noreferrer">' . $value['ip_address'] . '</a>'; ?></td>
             <td><?php echo $value['country']; ?></td>
             <td><?php echo $value['region']; ?></td>
             <td><?php echo $value['country_name']; ?></td>

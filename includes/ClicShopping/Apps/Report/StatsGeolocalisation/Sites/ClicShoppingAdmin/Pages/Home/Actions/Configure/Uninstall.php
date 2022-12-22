@@ -26,7 +26,7 @@
       $m = Registry::get('StatsGeolocalisationAdminConfig' . $current_module);
       $m->uninstall();
 
-      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_module_uninstall_success'), 'success', 'StatsGeolocalisation');
+      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_module_uninstall_success'), 'success');
 
       $CLICSHOPPING_StatsGeolocalisation->redirect('Configure&module=' . $current_module);
     }

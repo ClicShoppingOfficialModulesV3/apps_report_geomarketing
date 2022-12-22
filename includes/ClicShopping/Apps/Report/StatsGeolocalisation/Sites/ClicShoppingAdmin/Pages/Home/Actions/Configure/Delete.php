@@ -31,7 +31,7 @@
 
       Cache::clear('menu-administrator');
 
-      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_module_uninstall_success'), 'success', 'StatsGeolocalisation');
+      $CLICSHOPPING_MessageStack->add($CLICSHOPPING_StatsGeolocalisation->getDef('alert_module_uninstall_success'), 'success');
 
       $CLICSHOPPING_StatsGeolocalisation->redirect('Configure&module=' . $current_module);
     }
@@ -54,7 +54,7 @@
 
         $menu = $QMenuId->fetchAll();
 
-        $menu1 = count($menu);
+        $menu1 = \count($menu);
 
         for ($i = 0, $n = $menu1; $i < $n; $i++) {
           $CLICSHOPPING_Db->delete('administrator_menu_description', ['id' => (int)$menu[$i]['id']]);
@@ -77,7 +77,7 @@
 
         $menu = $QMenuId->fetchAll();
 
-        $menu1 = count($menu);
+        $menu1 = \count($menu);
 
         for ($i = 0, $n = $menu1; $i < $n; $i++) {
           $CLICSHOPPING_Db->delete('administrator_menu_description', ['id' => (int)$menu[$i]['id']]);
@@ -99,7 +99,7 @@
 
         $menu = $QMenuId->fetchAll();
 
-        $menu1 = count($menu);
+        $menu1 = \count($menu);
 
         for ($i = 0, $n = $menu1; $i < $n; $i++) {
           $CLICSHOPPING_Db->delete('administrator_menu_description', ['id' => (int)$menu[$i]['id']]);
